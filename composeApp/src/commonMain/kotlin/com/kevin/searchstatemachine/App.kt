@@ -26,8 +26,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -262,19 +265,24 @@ private fun StateTabs(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
+            .horizontalScroll(rememberScrollState())
+            .selectableGroup(),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         states.forEachIndexed { index, state ->
             val selected = selectedIndex == index
             Surface(
-                modifier = Modifier.clickable { onSelected(index) },
+                modifier = Modifier
+                    .heightIn(min = 48.dp)
+                    .selectable(selected = selected, role = Role.Tab, onClick = { onSelected(index) }),
                 shape = RoundedCornerShape(50),
                 color = if (selected) state.accent else Color.White,
                 border = BorderStroke(1.dp, if (selected) state.accent else Line)
             ) {
                 Text(
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .padding(horizontal = 12.dp, vertical = 9.dp),
                     text = state.tab,
                     color = if (selected) Color.White else Ink,
                     fontWeight = FontWeight.Black,
